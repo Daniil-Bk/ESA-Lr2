@@ -1,0 +1,70 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Книги</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+</head>
+<body>
+<div class="header">
+    <div class="header-link current-link">
+        <a href="authors.html">Авторы</a>
+    </div>
+    <div class="header-link">
+        <a href="books.html">Книги</a>
+    </div>
+</div>
+<div id="content">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <td>Название</td>
+                <td>Жанр</td>
+                <td>Количество</td>
+                <td>Автор</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="book in bookList">
+                <td>{{book.name}}</td>
+                <td>{{book.genre}}</td>
+                <td>{{book.count}}</td>
+                <td>{{book.author.name + book.author.surname}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    var vue = new Vue({
+        el: "#content",
+        data: {
+            bookListApi: Vue.resource('../books'),
+            authorListApi: Vue.resource('../authors'),
+            bookList: [],
+            authors: []
+        },
+        beforeMount: function () {
+                this.bookListApi
+                    .get()
+                    .then(
+                        response => {
+                            this.bookList = response.body;
+                        }
+                    );
+                this.authorListApi
+                    .get()
+                    .then(
+                        response => {
+                            this.authors = response.body;
+                        }
+                    );
+
+            }
+
+    });
+
+</script>
+</body>
+</html>
